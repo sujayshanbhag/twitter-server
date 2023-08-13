@@ -1,8 +1,6 @@
-import axios from 'axios'
-import { prismaClient } from '../../clients/db';
-import JWTService from '../../services/jwt';
-import { GraphqlContext } from '../../interfaces';
-import { User } from '@prisma/client';
+import axios from "axios";
+import { prismaClient } from "../clients/db";
+import JWTService from "./jwt";
 
 interface GoogleTokenResult {
     iss?: string;
@@ -24,8 +22,8 @@ interface GoogleTokenResult {
     typ?: string;
 }
 
-const queries = {
-    verifyGoogleToken : async(parent: any,{token}:{token : string}) => {
+class UserService {
+    public static async verifyGoogleAuthToken(token : string){
         const googleToken = token;
         const googleOauthURL = new URL('https://oauth2.googleapis.com/tokeninfo');
         googleOauthURL.searchParams.set('id_token',googleToken);
@@ -60,22 +58,9 @@ const queries = {
         const userToken = await JWTService.generateTokenForUser(userInDb)
 
         return userToken;
-    },
-    getCurrentUser : async(parent : any, args : any, ctx: GraphqlContext) => {
-        const id= ctx.user?.id;
-        if(!id) return null;
-
-        const user = await prismaClient.user.findUnique({ where: {id}})
-        return user;
-    },
-    getUserById : async(parent : any, {id} : {id : string}, ctx: GraphqlContext) => 
-        prismaClient.user.findUnique({where : {id}})
-};
-
-const tweetResolver = {
-    User : {
-        tweets: (parent: User) => prismaClient.tweet.findMany({ where :{authorId : parent.id}})
+    }
+    public static getUserById(id : string) {
+        return prismaClient.user.findUnique({where : {id}});
     }
 }
-
-export const resolvers = {queries, tweetResolver};
+export default UserService;
