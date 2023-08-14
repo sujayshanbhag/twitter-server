@@ -62,6 +62,35 @@ const extraResolver = {
             });
             return result.map((el) => el.following);
           },
+          recommendedUsers: async(parent: User,_: any,ctx: GraphqlContext) => {
+            if(!ctx.user){
+              return [];
+            }
+            const myFollowings= await prismaClient.follows.findMany({
+              where : {follower : {id: ctx.user.id}},
+              include : {
+                following: {
+                      include: {
+                        followers: {
+                        include : {following: true}
+                        }
+                      }
+                }
+            }
+            },
+            );
+            const usersToRecommend : User[] =[]
+            for(const followings of myFollowings){
+              for(const followingfOfFollowedUser of followings.following.followers){
+                if(
+                  followingfOfFollowedUser.following.id !== ctx.user.id && 
+                  myFollowings.findIndex(e => e.followingId === followingfOfFollowedUser.following.id) < 0){
+                    usersToRecommend.push(followingfOfFollowedUser.following);
+                }
+              }
+            }
+            return usersToRecommend;
+          }
     }
 }
 
