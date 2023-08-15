@@ -1,5 +1,5 @@
 import { prismaClient } from "../clients/db";
-import { redisClient } from "../clients/db/redis";
+import { redisClient } from "../clients/redis";
 
 export interface CreateTweetPayload {
     content : string;
