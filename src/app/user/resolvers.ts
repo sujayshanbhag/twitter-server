@@ -54,36 +54,36 @@ const extraResolver = {
             });
             return result.map((el) => el.follower);
           },
-          following: async (parent: User) => {
-            const result = await prismaClient.follows.findMany({
-              where: { follower: { id: parent.id } },
-              include: {
-                following: true,
-              },
-            });
-            return result.map((el) => el.following);
-          },
-          recommendedUsers: async(parent: User,_: any,ctx: GraphqlContext) => {
-            if(!ctx.user){
-              return [];
-            }
-            const cachedValue= await redisClient.get(`RECOMMENDED_USERS:${ctx.user.id}`);
-            if(cachedValue){
-              return JSON.parse(cachedValue);
-            }
-            const myFollowings= await prismaClient.follows.findMany({
-              where : {follower : {id: ctx.user.id}},
-              include : {
-                following: {
-                      include: {
-                        followers: {
-                        include : {following: true}
-                        }
-                      }
-                }
-            }
+        following: async (parent: User) => {
+          const result = await prismaClient.follows.findMany({
+            where: { follower: { id: parent.id } },
+            include: {
+              following: true,
             },
-            );
+          });
+          return result.map((el) => el.following);
+        },
+        recommendedUsers: async(parent: User,_: any,ctx: GraphqlContext) => {
+          if(!ctx.user){
+            return [];
+          }
+          const cachedValue= await redisClient.get(`RECOMMENDED_USERS:${ctx.user.id}`);
+          if(cachedValue){
+            return JSON.parse(cachedValue);
+          }
+          const myFollowings= await prismaClient.follows.findMany({
+            where : {follower : {id: ctx.user.id}},
+            include : {
+              following: {
+                    include: {
+                      followers: {
+                      include : {following: true}
+                      }
+                    }
+              }
+          }
+          },
+          );
             
             const usersToRecommend : User[] =[]
             const creater = await prismaClient.user.findUnique({where : {id: "clkz41n8k0000t3eknef2brfs"}})

@@ -6,6 +6,11 @@ export interface CreateTweetPayload {
     imageURL? : string;
     userId: string;
 }
+interface CreateCommentPayload {
+    content : string,
+    from : string,
+    to: string
+}
 
 class TweetService {
     public static async createTweet(data : CreateTweetPayload) {
@@ -46,6 +51,15 @@ class TweetService {
             where : {
                 authorId_tweetId : {authorId: from, tweetId :to}
             },
+        })
+    }
+    public static async addComment(data : CreateCommentPayload) {
+        return prismaClient.comments.create({
+            data : {
+                author : {connect : {id :data.from} },
+                tweet : {connect : {id : data.to}},
+                content : data.content,
+            }
         })
     }
 }

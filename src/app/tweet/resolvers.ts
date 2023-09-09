@@ -58,10 +58,10 @@ const mutations = {
         return tweet;
     }
 }
-const authorResolver = {
+const extraResolver = {
     Tweet : {
-        author : (parent : Tweet) =>
-            UserService.getUserById(parent.authorId)
+        author : (parent : Tweet) => UserService.getUserById(parent.authorId),
+        comment : (parent: Tweet) => prismaClient.comments.findMany({ where: { tweetId: parent.id  } }),
     }
 }
-export const resolvers = {mutations,queries, authorResolver};
+export const resolvers = {mutations,queries, extraResolver};
