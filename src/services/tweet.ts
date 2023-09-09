@@ -33,6 +33,21 @@ class TweetService {
         await redisClient.set('ALL_TWEETS',JSON.stringify(tweets));
         return tweets;
     }
+    public static async addLike(from : string,to : string) {
+        return prismaClient.likes.create({
+            data : {
+                author : {connect : {id: from}},
+                tweet : {connect : {id : to}}
+            },
+        })
+    }
+    public static async removeLike(from : string,to : string) {
+        return prismaClient.likes.delete({
+            where : {
+                authorId_tweetId : {authorId: from, tweetId :to}
+            },
+        })
+    }
 }
 
 export default TweetService;

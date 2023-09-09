@@ -5,6 +5,7 @@ import cors from 'cors'
 import { expressMiddleware } from '@apollo/server/express4';
 import {User} from './user'
 import {Tweet} from './tweet'
+import {Like} from './likes'
 import { GraphqlContext } from '../interfaces';
 import JWTService from '../services/jwt';
 
@@ -22,6 +23,7 @@ export async function initServer() {
         typeDefs: `
         ${User.types}
         ${Tweet.types}
+        ${Like.types}
         type Query {
             ${User.queries}
             ${Tweet.queries}
@@ -29,6 +31,7 @@ export async function initServer() {
         type Mutation {
             ${Tweet.mutations}
             ${User.mutations}
+            ${Like.mutations}
         }
         `,
         resolvers: {
@@ -39,6 +42,7 @@ export async function initServer() {
             Mutation : {
                 ...Tweet.resolvers.mutations,
                 ...User.resolvers.mutations,
+                ...Like.resolvers.mutations
             },
             ...Tweet.resolvers.authorResolver,
             ...User.resolvers.extraResolver,
