@@ -1,5 +1,8 @@
+import { Comments } from "@prisma/client";
 import { GraphqlContext } from "../../interfaces";
 import TweetService from "../../services/tweet";
+import UserService from "../../services/user";
+import { prismaClient } from "../../clients/db";
 
 interface CreateCommentPayload {
     content: string,
@@ -18,5 +21,9 @@ const mutations = {
         return comment;
     }
 }
-
-export const resolvers = {mutations};
+const extraResolver = {
+    Comments : {
+        author : async (parent : Comments) => UserService.getUserById(parent.authorId)
+    }
+}
+export const resolvers = {mutations,extraResolver};

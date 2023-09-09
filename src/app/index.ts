@@ -6,7 +6,7 @@ import { expressMiddleware } from '@apollo/server/express4';
 import {User} from './user'
 import {Tweet} from './tweet'
 import {Like} from './likes'
-import {Comment} from './comment'
+import {Comments} from './comment'
 import { GraphqlContext } from '../interfaces';
 import JWTService from '../services/jwt';
 
@@ -25,7 +25,7 @@ export async function initServer() {
         ${User.types}
         ${Tweet.types}
         ${Like.types}
-        ${Comment.types}
+        ${Comments.types}
         type Query {
             ${User.queries}
             ${Tweet.queries}
@@ -34,7 +34,7 @@ export async function initServer() {
             ${Tweet.mutations}
             ${User.mutations}
             ${Like.mutations}
-            ${Comment.mutations}
+            ${Comments.mutations}
         }
         `,
         resolvers: {
@@ -46,10 +46,11 @@ export async function initServer() {
                 ...Tweet.resolvers.mutations,
                 ...User.resolvers.mutations,
                 ...Like.resolvers.mutations,
-                ...Comment.resolvers.mutations
+                ...Comments.resolvers.mutations
             },
             ...Tweet.resolvers.extraResolver,
             ...User.resolvers.extraResolver,
+            ...Comments.resolvers.extraResolver
         },
     });
     await graphqlServer.start();

@@ -1,3 +1,3 @@
 export const mutations =`#graphql
-    addComment(payload : CreateCommentData) : Comment
+    addComment(payload : CreateCommentData) : Comments
 `

@@ -5,7 +5,7 @@ export const types = `#graphql
         content: String!
     }
 
-    type Comment {
+    type Comments {
         id: ID!
         content: String!
 

@@ -12,6 +12,6 @@ export const types = `#graphql
 
         author : User
         likes : [Like]
-        comment : [Comment]
+        comment : [Comments]
     }
 `;

@@ -60,6 +60,7 @@ class UserService {
         return userToken;
     }
     public static async getUserById(id : string) {
+        console.log("hello",id);
         return prismaClient.user.findUnique({where : {id}});
     }
     public static followUser(from : string, to: string) {
