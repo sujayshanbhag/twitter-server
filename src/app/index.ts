@@ -50,7 +50,8 @@ export async function initServer() {
             },
             ...Tweet.resolvers.extraResolver,
             ...User.resolvers.extraResolver,
-            ...Comments.resolvers.extraResolver
+            ...Comments.resolvers.extraResolver,
+            ...Like.resolvers.extraResolver
         },
     });
     await graphqlServer.start();

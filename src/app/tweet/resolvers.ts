@@ -62,6 +62,7 @@ const extraResolver = {
     Tweet : {
         author : (parent : Tweet) => UserService.getUserById(parent.authorId),
         comment : (parent: Tweet) => prismaClient.comments.findMany({ where: { tweetId: parent.id  } }),
+        likes : (parent : Tweet) => prismaClient.likes.findMany({ where: { tweetId: parent.id}}),
     }
 }
 export const resolvers = {mutations,queries, extraResolver};

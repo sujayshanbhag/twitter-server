@@ -1,5 +1,7 @@
+import { Likes } from "@prisma/client";
 import { GraphqlContext } from "../../interfaces";
 import TweetService from "../../services/tweet";
+import UserService from "../../services/user";
 
 const mutations = {
     addLike : async (parent: any,{to}: {to : string},ctx : GraphqlContext) => {
@@ -17,4 +19,9 @@ const mutations = {
         return true;
     }
 }
-export const resolvers ={mutations};
+const extraResolver = {
+    Like : {
+        author : (parent : Likes) => UserService.getUserById(parent.authorId),
+    }
+}
+export const resolvers ={mutations,extraResolver};
