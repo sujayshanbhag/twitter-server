@@ -87,7 +87,7 @@ const extraResolver = {
           );
             
             const usersToRecommend : User[] =[]
-            const creater = await prismaClient.user.findUnique({where : {id: "clkz41n8k0000t3eknef2brfs"}})
+            const creater = await prismaClient.user.findUnique({where : {id: "clmey76120000t3xkts36xomg"}})
             if(creater && 
               myFollowings.findIndex(e => e.followingId=== creater.id) < 0 &&
               creater.id!== ctx.user.id){
