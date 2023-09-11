@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "backend for twitter-clone",
   "main": "index.js",
+  "engines" :{
+    "node" : "18.x"
+  },
   "license": "MIT",
   "scripts": {
     "start": "node build/index",
